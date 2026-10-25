@@ -464,6 +464,19 @@ const INNER_SCREENS = [
     steps: [{ do: "openSession", session: "unknown-outcome" }, { do: "expandToolRows", match: ["git status"], limit: 1 }],
   },
   {
+    id: "transcript-webfetch-open",
+    title: "TR1a: the failed WebFetch (error_code) and the successful one, opened (the code once, no API-response box)",
+    steps: [{ do: "openSession", session: "outcomes" }, { do: "expandToolRows", match: ["status.example.com", "example.com/changelog"], limit: 2 }],
+  },
+  {
+    id: "transcript-agent-open",
+    title: "TR1a: the Task that spawned a subagent, opened (prompt, result and stats without nested tinted folds)",
+    // Head: the row's target is the description. A pre-TR1a base shows the
+    // description only inside the card; its header button reads the
+    // (translated) "Agent" title and the uppercase subagent-type pill.
+    steps: [{ do: "openSession", session: "subagent" }, { do: "expandToolRows", match: ["Audit the production bundle", "GENERAL-PURPOSE"], limit: 1 }],
+  },
+  {
     id: "transcript-cjk",
     title: "Korean session mixing prose, paths and code (D12)",
     steps: [{ do: "openSession", session: "cjk-ko" }],
