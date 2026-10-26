@@ -950,14 +950,15 @@ fn legacy_composer_workspaces(
     ws_root: &Path,
     report: &ScanReport,
 ) -> std::collections::HashMap<String, String> {
-    let Ok(entries) = fs::read_dir(ws_root) else {
-        return std::collections::HashMap::new();
-    };
-    let ws_paths: Vec<PathBuf> = entries
-        .filter_map(|entry| report.read(ws_root, entry))
+    let mut ws_paths: Vec<PathBuf> = report
+        .read_dir(ws_root)
+        .into_iter()
         .map(|entry| entry.path())
         .filter(|path| !crate::utils::is_symlink(path) && path.is_dir())
         .collect();
+    // Fixed order so a composer listed by several workspaces always resolves
+    // to the same one (`read_dir` order is platform-dependent).
+    ws_paths.sort();
 
     let listings = crate::utils::par_map_bounded(ws_paths, |ws_path| {
         let workspace_id = ws_path.file_name()?.to_string_lossy().to_string();
